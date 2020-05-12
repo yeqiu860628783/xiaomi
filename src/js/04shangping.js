@@ -1,12 +1,14 @@
 //获取商品
-function getGoods(){
-    $.get("./php/getGoodsList.php?typeId=001",function(data){
-       showData(data);
-    },"json");
+function getGoods() {
+    $.get("./php/getGoodsList.php?typeId=001", function (data) {
+        showData(data);
+    }, "json");
 }
 // 显示商品
-function showData(data){
-    let htmlStr="";
+let t = false
+
+function showData(data) {
+    let htmlStr = "";
     let h2 = ""
     data.forEach(item => {
         h2 = item.goodsName
@@ -50,7 +52,7 @@ function showData(data){
                     <p>小米自营</p>
                     <!-- 价格 -->
                     <div class="price">
-                        <span>${item.goodsPrice}</span>
+                        <span>${item.goodsPrice}元</span>
                     </div>
                     <div class="addWarp">
                         <div class="add">
@@ -207,12 +209,11 @@ function showData(data){
         `
     });
     $(".xinxi_con>h2").html(h2)
-    $(".main_con").html(htmlStr);  
+    $(".main_con").html(htmlStr);
+    return t = true
 }
 getGoods();
-
-//等待显示再轮播图
-setTimeout(()=>{
+if (t = true) {
     // 当前播放的图片的序号
     let ord = 0;
     // 定义定时器
@@ -310,14 +311,82 @@ setTimeout(()=>{
             $(".huidin").css("display", "none")
         }
     }
-   
-},3000)
 
-$(function(){
-     //跳转购物车
-     $(".gw").click(function () {
-         open("06gowuche.html")
-     })
+}
+
+$(function () {
+    //跳转购物车
+    $(".gw").click(function () {
+        open("06gowuche.html")
+    })
+    onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop >= 200) {
+            // 吸顶。
+            $(".xinxi").css({
+                background: "#fff",
+                position: "fixed",
+                top: "0px"
+            })
+        } else {
+            // 如果滚动距离小于200px时，不吸顶。
+            $(".xinxi").css({
+                position: "static",
+                top: "0px"
+            })
+        }
+    }
+})
+$(".xuanze>ul>li").click(function () {
+    $('.xuanze>ul>li').css({
+        borderColor: '#e0e0e0'
+    })
+    $('.xuanze>ul>li>a>span').eq(0).css({
+        color: "#000"
+    })
+    $('.xuanze>ul>li>a>span').eq(2).css({
+        color: "#000"
+    })
+    $('.xuanze>ul>li>a>span').eq(4).css({
+        color: "#000"
+    })
+    $('.xuanze>ul>li>a>span').eq(1).css({
+        color: "#c5c2c2"
+    })
+    $('.xuanze>ul>li>a>span').eq(3).css({
+        color: "#c5c2c2"
+    })
+    $('.xuanze>ul>li>a>span').eq(5).css({
+        color: "#c5c2c2"
+    })
+    $(this).css({
+        borderColor: "#ff6700"
+    })
+    $(this).children().children().eq(0).css({
+        color: "#ff6700"
+    })
+    $(this).children().children().eq(1).css({
+        color: "#585858"
+    })
+})
+$(".xuanze2>ul>li").click(function () {
+    $('.xuanze2>ul>li').css({
+        borderColor: '#e0e0e0'
+    })
+    $('.xuanze2>ul>li>a>em').css({
+        color: "#000"
+    })
+    $(this).css({
+        borderColor: "#ff6700"
+    })
+    $(this).children().children().eq(1).css({
+        color: "#ff6700"
+    })
 })
 
-
+$(".choose>ul>li>i>em").click(function () {
+    $(this).css("color", "#000")
+})
+$(".choose>ul>li>div>p>i>em").click(function () {
+    $(this).css("color", "#000")
+})

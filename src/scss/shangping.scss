@@ -164,6 +164,7 @@ header{
     transition: all .2s;
 }
 .xinxi{
+    transition: all .5s;
     width: 100%;
     position: relative;
     z-index: 4;
@@ -401,7 +402,7 @@ main{
     display: table;
 }
 .banben ul li{
-    color: #ff6700;
+    
     margin-left: 6px;
     margin-top: 15px;
     line-height: 42px;
@@ -1096,12 +1097,12 @@ main{
 .item .rgo h5 a:nth-of-type(1){
     background: url(../images/tubiao.png) no-repeat;
     background-size: cover;
-    background-position: -29px;
+    background-position: -31px;
 }
 .item .rgo h5 a:nth-of-type(2) {
     background: url(../images/tubiao.png) no-repeat;
     background-size: cover;
-    background-position: -89px;
+    background-position: -94px;
 }
 footer {
     font-size: 12px;
