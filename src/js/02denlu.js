@@ -12,7 +12,10 @@ $(function(){
             },
             function (data) {
                 if (data == "success") {
-                    saveCookie("username", $("#username").val());
+                    //删除cook
+                    // saveCookie("username", "", -1);
+                    //添加cook
+                    saveCookie("username", $("#username").val(),"7");
                     location.href = "03index.html";
                 } else if (data == "fail") {
                     alert("登录失败，账号或密码错误")

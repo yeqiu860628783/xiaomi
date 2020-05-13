@@ -1,131 +1,179 @@
-// 当前播放的图片的序号
-let ord = 0;
-// 定义定时器
-let myTimer = null;
-let $img = $(".img>img");
-let $li = $(".dian>a");
-let t = true
-function autoPlay() {
-    if(t== true){
-        myTimer = setInterval(function () {
-            // 跳转到下一张图片上
-            goImg(ord + 1);
-        }, 4000);
-    }
-}
-// 跳转到指定的图片上（transOrd就是要跳转的图片的序号）
-function goImg(transOrd) {
-    t = false
-    // 一、数据的合法性处理
-    if (transOrd == ord) {
-        return; //结束函数执行
-    }
-    // 二、逻辑
-    // 1、数据处理
-    // outOrd是淡出的图片序号，transOrd是要淡入的图片序号（即：跳转的图片序号）
-    let outOrd = ord;
-    ord = transOrd;
+function getShoppingCar(use, cb) {
+    $.get("./php/getShoppingCart.php", {
+        "vipName": use
+    }, function (datas) {
+        let htmlStr = `
+             <table>
+                <tr>
+                    <td>
+                        <input type="checkbox" >
+                    </td>
+                    <td>编号</td>
+                    <td>商品名称</td>
+                    <td>价格</td>
+                    <td>数量</td>
+                    <td>金额</td>
+                    <td>操作</td>
+                </tr>  
+        `;
 
-    // 2、边界处理
-    if (ord > $img.length - 1) {
-        ord = 0;
-    } else if (ord < 0) {
-        ord = $img.length - 1;
-    }
-    //3、外观：
-    // 3.1）、让一张图片淡出，一张图片淡入
-    $img.eq(outOrd).animate({
-        "opacity": 0
-    }, 1000);
-    $img.eq(ord).animate({
-        "opacity": 1
-    }, 1000);
-    // 3.2）、变豆豆
-    $li.eq(outOrd).css({
-        "border-color": "hsla(0, 0%, 100%, .3)",
-        "background": "rgba(0, 0, 0, .4)"
-    });
-    $li.eq(ord).css({
-        "background": "hsla(0, 0%, 100%, .4)",
-        "border-color": "rgba(0, 0, 0, .4)"
-    });
-    return t = true
-}
-function stopPlay() {
-    window.clearInterval(myTimer);
-    myTimer = null;
+        datas.forEach(goods => {
+            htmlStr += `
+                        <tr>
+                            <td>
+                                <input type="checkbox" >
+                            </td>
+                            <td class="goodsId">${goods.goodsId}</td>
+                            <td>${goods.goodsName}</td>
+                            <td>${goods.goodsPrice}</td>
+                            <td>
+                                <input type="button" class="reduceBtn" value="-">
+                                <span>${goods.goodsCount}</span>
+                                <input type="button" class="addBtn" value="+">
+                            </td>
+                            <td>${goods.goodsPrice*goods.goodsCount}</td>
+                            <td>
+                                <input class="delBtn" type="button" value="删除">
+                            </td>
+                        </tr>
+            `;
+        });
+        htmlStr += `
+                    <tr>
+                        <td colspan="8">
+                            总金额：<span>0</span>
+                        </td>
+                    </tr>
+                </table>
+                `;
+        // 把产生html字符串放在html页面上
+        $("section").html(htmlStr);
+        cb()
+    }, "json")
 }
 
+function addEvent() {
+    //添加事件 
+    console.log($("table :checkbox:eq(0)"))
+    console.log($("table :checkbox:gt(0)"))
+    $("table :checkbox:eq(0)").check($("table :checkbox:gt(0)"));
+    $(":checkbox").click(function () {
+        totalMoney();
+    });
+    $(".addBtn").click(function () {
+        //一、修改后端的数量
+        let goodsId = $(this).parent().parent().find(".goodsId").html();
+        let count = $(this).prev().html();
+        count++;
+        updateCount(goodsId, count, () => {
+            //二、修改前端的数量
+            // 数量            
+            $(this).prev().html(count);
+            // 单价
+            let price = $(this).parent().prev().html();
+            // 计算金额
+            let money = price * count;
+            $(this).parent().next().html(money);
+
+            // 总金额
+            totalMoney();
+        });
+    });
+    $(".reduceBtn").click(function () {
+        //一、修改后端的数量
+        let goodsId = $(this).parent().parent().find(".goodsId").html();
+        let count = $(this).next().html();
+        count--;
+        if (count < 1) {
+            count = 0;
+        }
+        updateCount(goodsId, count, () => {
+            // 二、修改前端的数量
+            // 数量 
+            $(this).next().html(count);
+            // 单价
+            let price = $(this).parent().prev().html();
+            // 计算金额
+            let money = price * count;
+            $(this).parent().next().html(money);
+
+            // 同时改变当前行的复选框的状态
+            if (count == 0) {
+                $(this).parent().parent().find(":checkbox").prop("checked",false);
+                // $(this).parent().parent().remove();
+            }
+            // 总金额
+            totalMoney();
+        })
+    });
+    $(".delBtn").click(function () {
+        if (confirm("亲，您真的要删除吗？")) {
+            $(this).parent().parent().remove();
+            totalMoney();
+        }
+    });
+
+}
+
+function updateCount(goodsId, goodsCount, cb) {
+    let use = getCookie("username")
+    //从cookie中获取用户名
+    $.get("./php/updateGoodsCount.php", {
+        "vipName": use,
+        "goodsId": goodsId,
+        "goodsCount": goodsCount
+    }, function (data) {
+        if (data == "0") {
+            alert("服务器出错：修改数量失败");
+        } else {
+            // 前端修改数量
+            cb();
+        }
+    });
+}
+
+function totalMoney() {
+    let money = 0;
+    let $tr = $("table tr:gt(0)").not("table tr:last");
+    $tr.each(function () {
+        // 复选框是不是选中了
+        if ($(this).find(":checkbox").prop("checked")) {
+            money += parseFloat($(this).find("td").eq(5).html());
+        }
+    });
+    $("table tr:last").find("span").html(money);
+}
 $(function () {
-    //1、自动播放
-    autoPlay();
-
-    //2、点击豆豆跳转到对应的图片上
-    $(".dian>a").click(function () {
-        stopPlay();
-        goImg($(this).index());
-    });
-
-    //3、鼠标放入停止
-    $("#imgBox").mouseover(function () {
-        stopPlay();
-    });
-
-    //4、鼠标离开继续播放    
-    $("#imgBox").mouseout(function () {
-        autoPlay();
-    });
-
-    //5、左右箭头
-    let $span = $("#imgBox>span");
-    // 左箭头
-    $span.eq(1).click(function () {
-        stopPlay();
-        goImg(ord - 1);
-    });
-    // 右箭头
-    $span.eq(0).click(function () {
-        stopPlay();
-        goImg(ord + 1);
-    });
-    $img.click(function(){
-        open("04shangping.html")
-    })
+    let use = getCookie("username")
+    if (use) {
+        let htmlStr = `
+            <div class="logo_con">
+                <div class="header-logo">
+                    <a href="03index.html">
+                        <img src="./images/1.png" alt="">
+                    </a>
+                </div>
+                <div class="header-title">
+                    <h2>我的购物车</h2>
+                </div>
+                <div class="header-den">
+                    <a>欢迎${use}</a>
+                    <span class="sep">|</span>
+                    <a>注销</a>
+                </div>
+            </div>
+        `
+        $("header").html(htmlStr)
+    }
+    getShoppingCar(use,addEvent);
 
     //回顶
     window.onscroll = function () {
         var t = document.documentElement.scrollTop || document.body.scrollTop;
         if (t >= 800) {
-            $(".huidin").css("display","block")
+            $(".huidin").css("display", "block")
         } else if (t < 800) {
             $(".huidin").css("display", "none")
         }
     }
-
-    
-    let tab = $(".banner_con>ul>li")
-    let nub = 1
-    for(let i=0;i<10;i++){
-        tab.eq(i).mouseover(function () {
-            nub += 1
-            $(".banner_con>ol").css("z-index", "1000");
-            $(".banner_con>ol>li").eq(i).css("opacity", "1");
-            $(".banner_con>ol>li").eq(i).css("z-index", nub);
-        })
-        tab.mouseout(function () {
-            $(".banner_con>ol").css("z-index", "-1");
-            $(".banner_con>ol>li").eq(i).css("opacity", "0");
-        })
-    }
-    $(".banner_con>ol>li").mouseover(function () {
-        $(".banner_con>ol").css("z-index", "1000");
-        $(this).css("opacity", "1");
-    })
-    $(".banner_con>ol>li").mouseout(function () {
-        $(".banner_con>ol").css("z-index", "-1");
-        $(this).css("opacity", "0");
-    })
 })
-
-
-

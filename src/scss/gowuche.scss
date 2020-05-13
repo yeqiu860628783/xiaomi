@@ -210,6 +210,36 @@ color: #fff;
 background: #ff6700;
 transition: all .4s;
 }
+table {
+    width: 100%;
+    min-height: 403px;
+    font-family: verdana,arial,sans-serif;
+    font-size:20px;
+    color:#333333;
+    border: 1px solid white;
+    border-collapse: collapse;
+    text-align: center;
+}
+table tr {
+    padding: 8px;
+    border: 1px solid #666666;
+    background-color: #dedede;
+}
+table td {
+    border: 1px solid #666666;
+    padding: 8px;
+    background-color: #ffffff;
+}
+table td input{
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+}
+table td .delBtn{
+    width: 80px;
+    height: 30px;
+    font-size: 20px;
+}
 .items_con {
     height: 272px;
     padding-bottom: 18px;
