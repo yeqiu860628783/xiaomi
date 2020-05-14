@@ -115,6 +115,12 @@ function showData(data, cb, goodsId) {
                                         <em>${data.beiyong8}</em>
                                     </a>
                                 </li>
+                                <li class="li4">
+                                    <a>
+                                        <img src="./img1/30.jpg" alt="">
+                                        <em>${data.beiyong12}</em>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div class="choose">
@@ -216,9 +222,13 @@ function showData(data, cb, goodsId) {
 }
 //显示之后的功能
 function cb(goodsId) {
-    if ($(".yanse1>li>a>em").eq(2).html() == "无") {
+    if ($(".yanse1>li>a>em").eq(2).html() == "0") {
         $(".yanse1>li>a>em").eq(2).parent().parent().remove()
     }
+    if ($(".yanse1>.li4>a>em").html() == "0") {
+       $(".yanse1>.li4>a>em").parent().parent().remove()
+    }
+   
      // 当前播放的图片的序号
     let ord = 0;
     // 定义定时器

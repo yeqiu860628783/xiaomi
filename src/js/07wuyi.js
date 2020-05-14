@@ -126,14 +126,38 @@ $(function () {
         $(this).css("opacity", "0");
     })
 
-    $(".clc").click(function () {
-        open('04shangping.html')
+    $(".xiao1").click(function () {
+        open('./04shangping.html?goodsId=01005')
     })
-    $(".cl").click(function(){
+    $(".xiao2").click(function () {
+        open('./04shangping.html?goodsId=01001')
+    })
+    $(".xiao3").click(function () {
+        open('./04shangping.html?goodsId=01003')
+    })
+    $(".xiao4").click(function () {
+        open('./04shangping.html?goodsId=01004')
+    })
+    $(".xiao5").click(function () {
+        open('./04shangping.html?goodsId=01002')
+    })
+    $(".xiao6").click(function () {
+        open('./04shangping.html?goodsId=01006')
+    })
+    $(".xiao7").click(function () {
+        open('./04shangping.html?goodsId=01007')
+    })
+    $(".xiao8").click(function () {
+        open('./04shangping.html?goodsId=01008')
+    })
+    $(".gd").click(function () {
         open('05spleibiao.html')
     })
     $(".gw").click(function () {
         open("06gowuche.html")
+    })
+    $(".wy").click(function () {
+        open("07wuyi.html")
     })
 })
 
