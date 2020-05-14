@@ -51,12 +51,63 @@ function goImg(transOrd) {
     });
     return t = true
 }
+//停止banner运动
 function stopPlay() {
     window.clearInterval(myTimer);
     myTimer = null;
 }
+//获取cookie显示欢迎语或者登录按钮
+function showWelcomeAndLogin() {
+    let userName = getCookie("username");
+    if (userName != null) {
+        let htmlStr = `
+            <a class="gereng">&nbsp;${userName}&nbsp; ∇ &nbsp;</a>
+            <a><span class="sep">|</span>消息通知<span class="sep">|</span></a>
+            <a href="#">我的订单</a>
+            <div id="cookie">
+                    <a>个人中心</a>
+                    <a>评价晒单</a>
+                    <a>我的喜欢</a>
+                    <a>小米账号</a>
+                    <a class="tuichu">退出登录</a>
+            </div>
+        `
+        $("#cook").html(htmlStr)
+        $(".gereng").hover(
+            //移入
+            function(){
+                $(this).css({
+                    color: "#ff6709",
+                    background:"#fff"})
+                $("#cookie").slideDown("fast");
+            },function(){
+                $(this).css({
+                    color: "#b0b0b0",
+                    background: "#333"})
+                $("#cookie").hover(function(){
+                    $("#cookie").css("display","block")
+                },function(){
+                    $("#cookie").slideUp("fast")
+                })
+                setTimeout(() => {
+                    $("#cookie").slideUp("fast")
+                }, 7000)
+        })
+        //退出登录
+        $(".tuichu").click(function(){
+            removeCookie("username")
+            let htmlStr = `
+             <a href="02denlu.html">登录<span class="sep">|</span></a>
+            <a href="01zhuce.html">注册<span class="sep">|</span></a>
+            <a href="#">消息通知</a>
+        `
+            $("#cook").html(htmlStr)
+        })
 
+    }
+}
 $(function () {
+    showWelcomeAndLogin();
     //1、自动播放
     autoPlay();
 
@@ -102,7 +153,7 @@ $(function () {
         }
     }
 
-    
+    //banner侧边
     let tab = $(".banner_con>ul>li")
     let nub = 1
     for(let i=0;i<10;i++){
@@ -125,7 +176,16 @@ $(function () {
         $(".banner_con>ol").css("z-index", "-1");
         $(this).css("opacity", "0");
     })
-
+    //搜索框点击颜色
+    $(".seb_con>div").click(function(){
+        $(this).css("borderColor", "#ff6700")
+        $(this).find("button").css("borderColor", "#ff6700")
+    })
+    $(".seb_con>div").focusout(function () {
+        $(this).css("borderColor", "#e0e0e0")
+        $(this).find("button").css("borderColor", "#e0e0e0")
+    })
+    //跳转
     $(".xiao1").click(function () {
         open('./04shangping.html?goodsId=01005')
     })

@@ -447,7 +447,61 @@ function addShoppingCar(goodsId){
         }
     });
 }
+//获取cookie显示欢迎语或者登录按钮
+function showWelcomeAndLogin() {
+    let userName = getCookie("username");
+    if (userName != null) {
+        let htmlStr = `
+            <a class="gereng">&nbsp;${userName}&nbsp; ∇ &nbsp;</a>
+            <a><span class="sep">|</span>消息通知<span class="sep">|</span></a>
+            <a href="#">我的订单</a>
+            <div id="cookie">
+                    <a>个人中心</a>
+                    <a>评价晒单</a>
+                    <a>我的喜欢</a>
+                    <a>小米账号</a>
+                    <a class="tuichu">退出登录</a>
+            </div>
+        `
+        $("#cook").html(htmlStr)
+        $(".gereng").hover(
+            //移入
+            function () {
+                $(this).css({
+                    color: "#ff6709",
+                    background: "#fff"
+                })
+                $("#cookie").slideDown("fast");
+            },
+            function () {
+                $(this).css({
+                    color: "#b0b0b0",
+                    background: "#333"
+                })
+                $("#cookie").hover(function () {
+                    $("#cookie").css("display", "block")
+                }, function () {
+                    $("#cookie").slideUp("fast")
+                })
+                setTimeout(() => {
+                    $("#cookie").slideUp("fast")
+                }, 7000)
+            })
+        //退出登录
+        $(".tuichu").click(function () {
+            removeCookie("username")
+            let htmlStr = `
+             <a href="02denlu.html">登录<span class="sep">|</span></a>
+            <a href="01zhuce.html">注册<span class="sep">|</span></a>
+            <a href="#">消息通知</a>
+        `
+            $("#cook").html(htmlStr)
+        })
+
+    }
+}
 $(function(){
+    showWelcomeAndLogin();
     let goodsId = location.search.split("=")[1];
     getGoods(goodsId,cb);
 })

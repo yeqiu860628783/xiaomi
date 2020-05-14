@@ -38,6 +38,7 @@ function getCookie(key){
 	}
 }
 
+
 //功能：删除cookie(根据键删除cookie)
 //参数：
 //key：键；
