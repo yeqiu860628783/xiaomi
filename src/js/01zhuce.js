@@ -20,10 +20,11 @@ $("#username").on("blur", function () {
             beforeSend:()=>{
                 $(".wait1").css({"display":"block"});
             },
-            success: function (str){
-                if (str == "0") {
+            success: (str)=>{
+                var t = str.indexOf(this.value)
+                if (t >= "0") {
                     $(".p").html("x,已有用户抢先注册")
-                } else if (str == "1") {
+                } else if (t == "-1") {
                     $(".p").html("亲，趁着还没人用，赶紧注册！")
                 } else {
                     $(".p").html("服务器出错了")
@@ -154,3 +155,4 @@ $("#userpass").keyup(function(){
         $(".qiangdu").css("display", "none")
     }
 })
+

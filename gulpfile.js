@@ -7,7 +7,7 @@ let babel =require("gulp-babel");
 gulp.task("default",async ()=>{
     gulp.watch(["./src/**/*", "!./src/{scss,scss/**}"], async () => {
         gulp.src(["./src/**/*", "!./src/{scss,scss/**}"])
-            .pipe(gulp.dest("D:\\phpStudy\\WWW\\xiao"));
+            .pipe(gulp.dest("E:\\wamp\\www\\2001\\xiao"));
     });
     // 压缩html
     gulp.watch("./src/*.html",async ()=>{
@@ -15,7 +15,7 @@ gulp.task("default",async ()=>{
         // .pipe(htmlmin({
         //     collapseWhitespace:true
         // }))
-        .pipe(gulp.dest("D:\\phpStudy\\WWW\\xiao"));
+        .pipe(gulp.dest("E:\\wamp\\www\\2001\\xiao"));
     });    
 
     // 压缩js
@@ -25,21 +25,21 @@ gulp.task("default",async ()=>{
             presets:['@babel/env']
         }))
         .pipe(uglify())
-        .pipe(gulp.dest("D:\\phpStudy\\WWW\\xiao\\js"));
+        .pipe(gulp.dest("E:\\wamp\\www\\2001\\xiao\\js"));
     });    
 
     //编译sass
     gulp.watch("./src/scss/*.scss",async ()=>{
         gulp.src("./src/scss/*.scss")
         .pipe(sass())
-        .pipe(gulp.dest("D:\\phpStudy\\WWW\\xiao\\css"));
+        .pipe(gulp.dest("E:\\wamp\\www\\2001\\xiao\\css"));
     });
 
     
     //把php文件夹里的所有代码原封不动的复制到服务器目录下
     gulp.watch("./src/php/**/*",async ()=>{
         gulp.src("./src/php/**/*")
-        .pipe(gulp.dest("D:\\phpStudy\\WWW\\xiao\\php"));
+        .pipe(gulp.dest("E:\\wamp\\www\\2001\\xiao\\php"));
     });
     
 });

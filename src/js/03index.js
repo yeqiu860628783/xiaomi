@@ -140,7 +140,7 @@ $(function () {
         goImg(ord + 1);
     });
     $img.click(function(){
-        open("04shangping.html")
+        open("./04shangping.html?goodsId=01005")
     })
 
     //回顶
@@ -219,7 +219,22 @@ $(function () {
     $(".wy").click(function () {
         open("07wuyi.html")
     })
+    setInterval(()=>{
+        time()
+    },1000)
 })
+function time(){
+    var data = new Date()
+    $("#time").html(data.getHours() + ":00 场")
+    let html = `
+        <span>00</span>
+        <i>:</i>
+        <span>${60-data.getMinutes()}</span>
+        <i>:</i>
+        <span>${60-data.getSeconds()}</span>
+    `
+    $("#ltime").html(html)
+}
 
 
 

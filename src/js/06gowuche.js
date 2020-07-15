@@ -1,7 +1,9 @@
 function getShoppingCar(use, cb) {
+    console.log(use)
     $.get("./php/getShoppingCart.php", {
         "vipName": use
     }, function (datas) {
+        console.log(datas)
         let htmlStr = `
              <table>
                 <tr>
@@ -54,8 +56,6 @@ function getShoppingCar(use, cb) {
 
 function addEvent() {
     //添加事件 
-    console.log($("table :checkbox:eq(0)"))
-    console.log($("table :checkbox:gt(0)"))
     $("table :checkbox:eq(0)").check($("table :checkbox:gt(0)"));
     $(":checkbox").click(function () {
         totalMoney();
@@ -123,6 +123,7 @@ function updateCount(goodsId, goodsCount, cb) {
         "goodsId": goodsId,
         "goodsCount": goodsCount
     }, function (data) {
+        console.log(data)
         if (data == "0") {
             alert("服务器出错：修改数量失败");
         } else {
@@ -166,7 +167,6 @@ $(function () {
         $("header").html(htmlStr)
     }
     getShoppingCar(use,addEvent);
-
     //回顶
     window.onscroll = function () {
         var t = document.documentElement.scrollTop || document.body.scrollTop;

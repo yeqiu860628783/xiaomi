@@ -3,6 +3,7 @@ function getGoods(goodsId,cb) {
     $.get("./php/getGoodsInfo.php", {
             "goodsId": goodsId,
     },function (data){
+        console.log(data)
         showData(data, cb, goodsId);
     },"json");
 }
